@@ -7,9 +7,9 @@ rev_objverid_array = []
 rev_comment_array = []
 rev_date_array = []
 
-def init():
+def init(filename):
   
-    tree = ET.parse('C:/Temp/temp.xml')
+    tree = ET.parse(filename)
     root = tree.getroot()
 
     for item in root[0].findall('item'):
