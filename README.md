@@ -53,3 +53,7 @@ To push to github, run the script:<br>
 `git_batch_pushes.sh`
 
 This script will batch push in groups of 100 commits at a time, to avoid the 2GB maximum size limit described [here](https://www.devopsschool.com/blog/git-error-remote-fatal-pack-exceeds-maximum-allowed-size-2-00-gib/).
+
+### Pinning In Vault
+
+Once the migration is complete and pushed to github, pin the folder in Vault that was migrated and add an explanatory label including the URL of its github location.
