@@ -3,6 +3,10 @@
 
 This script is used to migrate repositories in SourceGear Vault to a Git repository.
 
+### Using screen For Long-Running Migrations Via SSH
+
+If you are running a migration via SSH through the VPN, for example on deeplearn, you will want to run it in a [screen session](https://linuxize.com/post/how-to-use-linux-screen/).
+
 ### Creating A Github Repository
 
 Before running the migration script, create a new empty repository in github to which you will push following the migration.
