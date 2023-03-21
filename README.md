@@ -3,49 +3,53 @@
 
 This script is used to migrate repositories in SourceGear Vault to a Git repository.
 
-### JADAK Example
+### Creating A Github Repository
 
-#### Example for FW-Hx6146-02 from Vault; adjust as needed for what you are migrating
-`python VaultToGit.py -ga git@github.com:jdkvision/FW-Hx6146-02.git -vr '\"JADAK LLC\"' -vf '\"Engineering/Projects - JADAK/Abstraction/Trunk/Code/FW-Hx6146-02\"' -u jcairns -p <password> --host syr-srv-vault1 -sgl "C:\Program Files (x86)\SourceGear\Vault Client"`
+Before running the migration script, create a new empty repository in github to which you will push following the migration.
 
-The local git repo will be placed in `C:\Temp\`.  So for the above example, it will be in `C:\Temp\FW-Hx6146-02\`.
+### Running The Script
 
-**NOTE:  You may omit any or all of the command line arguments (e.g. you may just run `python VaultToGit.py`), in which case you will be prompted to provide them interactively.**
+The script will prompt for all required information, so to begin, simply run it via:
+`python VaultToGit.py`
 
-#### To Remove Vault's _sgbak Folders BEFORE Git Commit (run in Windows command prompt in root of project folder)
+You will be presented with the following prompts for input:
 
-`FOR /d /r . %d IN (_sgbak) DO @IF EXIST %d rd /s /q "%d"`
+- Enter Your Vault Username:
 
-#### To Remove Vault's _sgbak Folders AFTER Git Commit (run in Windows command prompt in root of project folder)
+- Enter Vault Host: (Press Enter to use default value of "syr-srv-vault1"):
+	- Generally, it should always be okay to press enter to use the default vaule here.
 
-`FOR /d /r . %d IN (_sgbak) DO @IF EXIST %d git rm -rf "%d"`
+- Enter Vault Repo (Press Enter to use default value of \"JADAK LLC\"):
+	- Generally, it should always be okay to press enter to use the default vaule here.
 
-##### Note: In order to run the script you must either use all the available arguments or change the defaults at the top of the VaultToGit.py script.
+- Enter Vault Folder:
+	- For example, $/Engineering/Projects - OEM/BectonDickinson/Twister (JDK-1807 1808 1809)/
 
+- Enter git Repo Address:
+	- For example, git@github.com:jdkvision/BD_Twister_JDK-1807_JDK-1808_JDK-1809.git
 
-#### The only variables that you would need to change are as follows:
+- WINDOWS ONLY: Enter SourceGear Location (Press Enter to use default value of 'C:\Program Files (x86)\SourceGear\Vault Client'):<br>
+  LINUX ONLY: Enter SourceGear Location (Press Enter to use default value of '/media/WD4TBSSD/vaultJavaCLC/'):
+	- Generally, it should always be okay to press enter to use the default vaule here.
 
-- The `git_repo_address`, which can be modified using the command line argument `--gitaddress` or `-ga`.
-	-  Example: `python  VaultToGit.py --gitaddress git@gitlab:ABC/Example.git`
+- Enter location in which to place the local copy of the migrated repo:
+	- If the location already exists, you will be asked whether to overwrite it. If it does not already exist, it will be created.
 
-- The `vaultRepo`, which is the repository in SourceGear vault you want to access. Its argument variables are `--vaultrepo` or `-vr`. 
-	- Example: `python VaultToGit.py --vaultrepo RepoName`
-- The `vaultFolder`, which is the folder in the vault repo you want to migrate. Its argument are `--vaultfolder` or `-vf`. 
-	- Example: `python VaultToGit.py --vaultfolder RepoFolder`.
+### Pushing To Github
 
-- The `vaultUser`, which is the username used to log into SourceGear Vault. Its arguements are `--user` or `-u`.
-	- Example: `python VaultToGit.py -u Useranme`
+Once the local migration is complete, change to the directory in which the local copy of the migrated repo is (the last argument you provided to the script).
 
-- The `vaultPasswd`, which is the password for the specified vaultUser. Its arguments are `--password` or `-p`. 
-	- Example: `pythonVaultToGit.py -p abc123`
+It's a good idea to ensure that no _sgbak Vault folders will be included in source control by running one of the following commands before pushing: 
 
-- The `vaultHost`, which the host server your SourceGear Vault repository. Its argument is just `--host`. 
-	- Example: `python VaultToGit.py --host localhost:3001`
+- To Remove Vault's _sgbak Folders BEFORE git push (run in Windows command prompt in root of project folder)
 
-- The `SourceGearLocation`, which is the location of Sourcegear Vault on your machine. Its arguments are `--sourcegear_location` or `-sgl`.
-	- Example: `python VaultToGit.py -sgl C:\Program Files (x86)\SourceGear\VaultPro Client`
+    `FOR /d /r . %d IN (_sgbak) DO @IF EXIST %d rd /s /q "%d"`
 
-###### Optional argument:
+- To Remove Vault's _sgbak Folders AFTER git push (run in Windows command prompt in root of project folder)
 
-- The `auto_pusher`, which is used to toggle auto pushing to git. It accepts a value of 1 or 0. Its arguments are `--auto_puser` or `-ap`. 
-	- Example: `python VaultToGit.py -ap 1`
+    `FOR /d /r . %d IN (_sgbak) DO @IF EXIST %d git rm -rf "%d"`
+
+To push to github, run the script:<br>
+`git_batch_pushes.sh`
+
+This script will batch push in groups of 100 commits at a time, to avoid the 2GB maximum size limit described [here](https://www.devopsschool.com/blog/git-error-remote-fatal-pack-exceeds-maximum-allowed-size-2-00-gib/).

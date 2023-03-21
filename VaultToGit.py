@@ -65,21 +65,21 @@ else:
 if args.host:
     vaultHost = args.host
 else:
-    vaultHost = input( "Enter Vault Host: (Press Enter to use default value of \"syr-srv-vault1\"" )
+    vaultHost = input( "Enter Vault Host: (Press Enter to use default value of \"syr-srv-vault1\"):" )
     if( "" == vaultHost ):
-        vaultHost = "syr-srv-vault1"    
+        vaultHost = "syr-srv-vault1"
 
 if args.vaultrepo:
     vaultRepo = args.vaultrepo
 else:
     vaultRepo = input( "Enter Vault Repo (Press Enter to use default value of \"JADAK LLC\"): " )
     if( "" == vaultRepo ):
-        vaultRepo = "\"JADAK LLC\""    
+        vaultRepo = "\"JADAK LLC\""
 
 if args.vaultfolder:
     vaultFolder = args.vaultfolder
 else:
-    vaultFolder = input( "Enter Vault Folder: " )    
+    vaultFolder = input( "Enter Vault Folder: " )
 
 if args.gitaddress:
     git_repo_address = args.gitaddress
@@ -131,6 +131,10 @@ if( not vaultRepo.startswith( "\"" ) ):
     vaultRepo = "\"" + vaultRepo
 if( not vaultRepo.endswith( "\"" ) ):
     vaultRepo = vaultRepo + "\""
+if( vaultFolder.startswith( "$" ) ):
+    vaultFolder = vaultFolder[1:]
+if( vaultFolder.startswith( "/" ) ):
+    vaultFolder = vaultFolder[1:]
 if( not vaultFolder.startswith( "\"" ) ):
     vaultFolder = "\"" + vaultFolder
 if( not vaultFolder.endswith( "\"" ) ):
@@ -144,6 +148,7 @@ if( not vaultPasswd.endswith( "\"" ) ):
 print("CALLING: " + cd_cmd + local_repo_folder + ' && git clone ' + git_repo_address)
 safe_os_system(cd_cmd + local_repo_folder + ' && git clone ' + git_repo_address)
 safe_os_system('git config user.name "' + vaultUser + '"')
+safe_os_system('git config push.default current')
 
 # creating .gitignore
 #gitpathcommand = 'cd /D C:\Temp\\' + gitDestination
