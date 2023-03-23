@@ -171,9 +171,9 @@ RevHistoryLocation = '"' + os.path.join(local_repo_folder, "") + 'temp_raw.xml"'
 vaultFolder_full = " $/" + vaultFolder
 getRevHistoryCommand = getRevHistory + " -repository " + vaultRepo + beginVersion + vaultFolder_full + " > " + RevHistoryLocation
 
-color_print(getRevHistoryCommand, color='blue')
+color_print(getRevHistoryCommand.replace(vaultPasswd, "XXXXXXXX"), color='blue')
 
-print("Calling: " + cd_cmd + SourceGearLocation + " && " + getRevHistoryCommand)
+print("Calling: " + cd_cmd + SourceGearLocation + " && " + getRevHistoryCommand.replace(vaultPasswd, "XXXXXXXX"))
 safe_os_system(cd_cmd + SourceGearLocation + " && " + getRevHistoryCommand)
 #safe_os_system("cd /D"+ vault2git_script_location)
 
@@ -214,7 +214,7 @@ for x in range(startVersion, loopLength, 1):
         git_commit_msg = '"Original Vault commit version ' + commit_version + " on " + commit_date + " (txid="+commit_txid+')"'
 
     getRepoCommand = ("./" if bIsLinux else "") + "vault GETVERSION" + credentials +" -repository " + vaultRepo +" "+ commit_version + vaultFolder_full +" " + gitDestination_full
-    color_print( getRepoCommand, color="pink")
+    color_print( getRepoCommand.replace(vaultPasswd, "XXXXXXXX"), color="pink")
     color_print( git_commit_msg,color="yellow")
     
     safe_os_system(cd_cmd + SourceGearLocation + " && " + getRepoCommand)
