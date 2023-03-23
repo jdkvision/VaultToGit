@@ -8,6 +8,7 @@ import getpass
 import platform
 import shutil
 import subprocess
+import datetime
 
 def safe_os_system(cmd):
     subprocess.run(cmd, shell=True)
@@ -180,6 +181,7 @@ strip_xml_entities.strip_chars(os.path.join(local_repo_folder, "") + "temp_raw.x
 
 input("Press Enter to continue...")
 
+migration_start = datetime.datetime.now()
 XmlParser.init(os.path.join(local_repo_folder, "") + "temp.xml")
 comments = XmlParser.CommentA()
 version = XmlParser.VersionA()
@@ -277,3 +279,5 @@ if (auto_pusher == 1):
     safe_os_system("git push -u origin master")
 else:
     color_print("To push the git repository please go to the directory it is located in review the repo and push manually", color="green")
+
+print("Migration took: " + str(datetime.datetime.now() - migration_start))
