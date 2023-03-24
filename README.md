@@ -43,16 +43,6 @@ You will be presented with the following prompts for input:
 
 Once the local migration is complete, change to the directory in which the local copy of the migrated repo is (the last argument you provided to the script).
 
-It's a good idea to ensure that no _sgbak Vault folders will be included in source control by running one of the following commands before pushing: 
-
-- To Remove Vault's _sgbak Folders BEFORE git push (run in Windows command prompt in root of project folder)
-
-    `FOR /d /r . %d IN (_sgbak) DO @IF EXIST %d rd /s /q "%d"`
-
-- To Remove Vault's _sgbak Folders AFTER git push (run in Windows command prompt in root of project folder)
-
-    `FOR /d /r . %d IN (_sgbak) DO @IF EXIST %d git rm -rf "%d"`
-
 To push to github, run the script:<br>
 `git_batch_pushes.sh`
 
