@@ -104,6 +104,7 @@ else:
             SourceGearLocation = "C:\Program Files (x86)\SourceGear\Vault Client"
 
 gitDestination = gitAdressParser.gitParser(git_repo_address)
+repo_name = git_repo_address[(git_repo_address.rfind("/") + 1):git_repo_address.rfind(".git")]
 print('gitDestination is: ', gitDestination, '\n')
 
 if args.local_repo:
@@ -167,7 +168,7 @@ if not gitIgnoreFile == "":
 credentials = " -host " + vaultHost + " -user " + vaultUser + " -password " + vaultPasswd
 getRevHistory = ("./" if bIsLinux else "") + "vault VERSIONHISTORY  -rowlimit 0 " + credentials
 beginVersion = " -beginversion 0 "
-RevHistoryLocation = '"' + os.path.join(local_repo_folder, "") + 'temp_raw.xml"'
+RevHistoryLocation = '"' + os.path.join(local_repo_folder, "") + repo_name + '_temp_raw.xml"'
 vaultFolder_full = " $/" + vaultFolder
 getRevHistoryCommand = getRevHistory + " -repository " + vaultRepo + beginVersion + vaultFolder_full + " > " + RevHistoryLocation
 
@@ -177,12 +178,12 @@ print("Calling: " + cd_cmd + SourceGearLocation + " && " + getRevHistoryCommand.
 safe_os_system(cd_cmd + SourceGearLocation + " && " + getRevHistoryCommand)
 #safe_os_system("cd /D"+ vault2git_script_location)
 
-strip_xml_entities.strip_chars(os.path.join(local_repo_folder, "") + "temp_raw.xml", os.path.join(local_repo_folder, "") + "temp.xml")
+strip_xml_entities.strip_chars(os.path.join(local_repo_folder, "") + repo_name + "_temp_raw.xml", os.path.join(local_repo_folder, "") + repo_name + "_temp.xml")
 
 input("Press Enter to continue...")
 
 migration_start = datetime.datetime.now()
-XmlParser.init(os.path.join(local_repo_folder, "") + "temp.xml")
+XmlParser.init(os.path.join(local_repo_folder, "") + repo_name + "_temp.xml")
 comments = XmlParser.CommentA()
 version = XmlParser.VersionA()
 txid = XmlParser.TxidA()
